@@ -12,17 +12,24 @@ public class PlayerEntity extends Entity {
     GamePanel gp;
     InputSystem inputSystem;
 
+    //to see where in the screen the entity should be rendered;
+    public final int screenX;
+    public final int screenY;
+
     public PlayerEntity(GamePanel gp, InputSystem inputSystem) {
         this.gp = gp;
         this.inputSystem = inputSystem;
+
+        screenX = gp.screenWidth / 2 - gp.tileSize/2;
+        screenY = gp.screenHeight / 2- gp.tileSize/2;
 
         SetDefaultValues();
         GetPlayerImage();
     }
 
     public void SetDefaultValues() {
-        x = 100;
-        y = 100;
+        worldX = gp.tileSize * 20;
+        worldY = gp.tileSize * 20;
         speed = 4;
     }
 
@@ -68,22 +75,22 @@ public class PlayerEntity extends Entity {
                 }
                 break;
         }
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 
     public void doPlayerMovement() {
         if(inputSystem.upPressed) {
             direction = "up";
-            y -= speed;
+            worldY -= speed;
         } else if (inputSystem.downPressed) {
             direction = "down";
-            y += speed;
+            worldY += speed;
         } else if (inputSystem.leftPressed) {
             direction = "left";
-            x -= speed;
+            worldX -= speed;
         } else if (inputSystem.rightPressed) {
             direction = "right";
-            x += speed;
+            worldX += speed;
         }
     }
 
