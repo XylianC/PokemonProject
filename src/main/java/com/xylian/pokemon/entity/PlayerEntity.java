@@ -28,15 +28,7 @@ public class PlayerEntity extends Entity {
 
     public void update() {
         doPlayerMovement();
-        spriteCounter++;
-        if(spriteCounter > 10) {
-            if(spriteIndex == 1) {
-                spriteIndex = 2;
-            } else if (spriteIndex == 2) {
-                spriteIndex = 1;
-            }
-            spriteCounter = 0;
-        }
+        doPlayerAnimation();
     }
 
     public void draw(Graphics2D g2) {
@@ -108,6 +100,20 @@ public class PlayerEntity extends Entity {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void doPlayerAnimation() {
+        if(inputSystem.upPressed|| inputSystem.downPressed || inputSystem.leftPressed || inputSystem.rightPressed) {
+            spriteCounter++;
+            if(spriteCounter > 15) { //every X frames it switches between sprite frames.
+                if(spriteIndex == 1) {
+                    spriteIndex = 2;
+                } else if (spriteIndex == 2) {
+                    spriteIndex = 1;
+                }
+                spriteCounter = 0;
+            }
         }
     }
 }

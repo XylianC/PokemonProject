@@ -1,6 +1,8 @@
 package com.xylian.pokemon.app;
 
 import com.xylian.pokemon.entity.PlayerEntity;
+import com.xylian.pokemon.world.tiles.Tile;
+import com.xylian.pokemon.world.tiles.TileManager;
 
 import java.awt.*;
 
@@ -12,8 +14,8 @@ public class GamePanel extends JPanel implements Runnable {
     final int scale = 3;
     public final int tileSize = originalTileSize * scale;
 
-    final int maxScreenCol = 24;
-    final int maxScreenRow = 18;
+    public final int maxScreenCol = 24;
+    public final int maxScreenRow = 18;
 
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
@@ -22,12 +24,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     InputSystem input = new InputSystem();
     Thread gameThread;
-    PlayerEntity playerEntity = new PlayerEntity(this,input);
 
-    // Set player default position
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 4;
+    TileManager tileManager = new TileManager(this);
+    PlayerEntity playerEntity = new PlayerEntity(this,input);
 
     // Construct the game window
     public GamePanel() {
@@ -82,6 +81,7 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
 
+        tileManager.draw(g2);
         playerEntity.draw(g2);
 
         g2.dispose();
