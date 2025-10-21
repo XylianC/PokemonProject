@@ -1,5 +1,6 @@
 package com.xylian.pokemon.entity;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
@@ -12,5 +13,7 @@ public class Entity {
     public int spriteCounter = 0;
     public int spriteIndex = 1;
 
+    public Rectangle solidArea;
+    public boolean collision = false;
 
 }

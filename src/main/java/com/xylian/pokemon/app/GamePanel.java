@@ -30,6 +30,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     InputSystem input = new InputSystem();
     Thread gameThread;
+    public CollisionChecker cChecker = new CollisionChecker(this);
 
     TileManager tileManager = new TileManager(this);
     public PlayerEntity playerEntity = new PlayerEntity(this,input);

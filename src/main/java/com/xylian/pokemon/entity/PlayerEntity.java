@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 public class PlayerEntity extends Entity {
     GamePanel gp;
@@ -23,6 +24,8 @@ public class PlayerEntity extends Entity {
         screenX = gp.screenWidth / 2 - gp.tileSize/2;
         screenY = gp.screenHeight / 2- gp.tileSize/2;
 
+        solidArea = new Rectangle(8, 16, 32, 32);
+
         SetDefaultValues();
         GetPlayerImage();
     }
@@ -34,11 +37,72 @@ public class PlayerEntity extends Entity {
     }
 
     public void update() {
-        doPlayerMovement();
-        doPlayerAnimation();
+        GetPlayerDirection();
+
+        boolean anyPressed = inputSystem.upPressed|| inputSystem.downPressed || inputSystem.leftPressed || inputSystem.rightPressed;
+
+        if(anyPressed) {
+            // collision code
+            collision = false;
+            gp.cChecker.CheckTile(this);
+
+            if (collision) {
+                switch (direction) {
+                    case "up":
+                        worldY -= speed;
+                        break;
+                    case "down":
+                        worldY += speed;
+                        break;
+                    case "left":
+                        worldX -= speed;
+                        break;
+                    case "right":
+                        worldX += speed;
+                        break;
+                }
+            }
+
+            doPlayerAnimation();
+        } else {
+            spriteIndex = 1;
+            spriteCounter = 0;
+        }
     }
 
     public void draw(Graphics2D g2) {
+        SetPlayerImages(g2);
+    }
+
+    public void GetPlayerDirection() {
+        if(inputSystem.upPressed) {
+            direction = "up";
+        } else if (inputSystem.downPressed) {
+            direction = "down";
+        } else if (inputSystem.leftPressed) {
+            direction = "left";
+        } else if (inputSystem.rightPressed) {
+            direction = "right";
+        }
+    }
+
+    public void GetPlayerImage() {
+        try {
+            up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_up1.png")));
+            up2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_up2.png")));
+            down1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_down1.png")));
+            down2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_down2.png")));
+            left1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_left1.png")));
+            left2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_left2.png")));
+            right1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_right1.png")));
+            right2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_right2.png")));
+
+        } catch (IOException e) {
+            System.err.println("No images were found");
+        }
+    }
+
+    public void SetPlayerImages(Graphics2D g2) {
         BufferedImage image = null;
 
         switch (direction) {
@@ -76,38 +140,6 @@ public class PlayerEntity extends Entity {
                 break;
         }
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
-    }
-
-    public void doPlayerMovement() {
-        if(inputSystem.upPressed) {
-            direction = "up";
-            worldY -= speed;
-        } else if (inputSystem.downPressed) {
-            direction = "down";
-            worldY += speed;
-        } else if (inputSystem.leftPressed) {
-            direction = "left";
-            worldX -= speed;
-        } else if (inputSystem.rightPressed) {
-            direction = "right";
-            worldX += speed;
-        }
-    }
-
-    public void GetPlayerImage() {
-        try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("/player/spr_player_up1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/player/spr_player_up2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/player/spr_player_down1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/player/spr_player_down2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/player/spr_player_left1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/player/spr_player_left2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/player/spr_player_right1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/player/spr_player_right2.png"));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void doPlayerAnimation() {
