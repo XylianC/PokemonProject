@@ -1,6 +1,7 @@
 package com.xylian.pokemon.app;
 
 import com.xylian.pokemon.entity.PlayerEntity;
+import com.xylian.pokemon.world.objects.MasterObject;
 import com.xylian.pokemon.world.tiles.Tile;
 import com.xylian.pokemon.world.tiles.TileManager;
 
@@ -30,10 +31,13 @@ public class GamePanel extends JPanel implements Runnable {
 
     InputSystem input = new InputSystem();
     Thread gameThread;
-    public CollisionChecker cChecker = new CollisionChecker(this);
 
-    TileManager tileManager = new TileManager(this);
+    public CollisionChecker cChecker = new CollisionChecker(this);
+    public AssetPlacer aPlacer = new AssetPlacer(this);
+    public TileManager tileManager = new TileManager(this);
     public PlayerEntity playerEntity = new PlayerEntity(this,input);
+
+    public MasterObject obj[] = new MasterObject[10];
 
     // Construct the game window
     public GamePanel() {
@@ -43,6 +47,10 @@ public class GamePanel extends JPanel implements Runnable {
 
         this.addKeyListener(input);
         this.setFocusable(true);
+    }
+
+    public void SetupLevel() {
+        aPlacer.SetObject();
     }
 
     public void startGameThread() {
@@ -89,6 +97,13 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D)g;
 
         tileManager.draw(g2);
+
+        for(int i = 0; i < obj.length; i++) {
+            if(obj[i] != null) {
+                obj[i].draw(g2, this);
+            }
+        }
+
         playerEntity.draw(g2);
 
         g2.dispose();

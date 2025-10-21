@@ -46,7 +46,7 @@ public class PlayerEntity extends Entity {
             collision = false;
             gp.cChecker.CheckTile(this);
 
-            if (collision) {
+            if (!collision) {
                 switch (direction) {
                     case "up":
                         worldY -= speed;
