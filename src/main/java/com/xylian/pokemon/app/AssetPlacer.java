@@ -1,7 +1,9 @@
 package com.xylian.pokemon.app;
 
 import com.xylian.pokemon.world.objects.OBJ_Chest;
+import com.xylian.pokemon.world.objects.OBJ_Door;
 import com.xylian.pokemon.world.objects.OBJ_Key;
+import com.xylian.pokemon.world.objects.OBJ_Pokebal;
 
 public class AssetPlacer {
     GamePanel gp;
@@ -23,5 +25,16 @@ public class AssetPlacer {
         gp.obj[2].worldX = 15 * gp.tileSize;
         gp.obj[2].worldY = 19 * gp.tileSize;
 
+        gp.obj[3] = new OBJ_Door();
+        gp.obj[3].worldX = 7 * gp.tileSize;
+        gp.obj[3].worldY = 20 * gp.tileSize;
+
+        gp.obj[4] = new OBJ_Chest();
+        gp.obj[4].worldX = 12 * gp.tileSize;
+        gp.obj[4].worldY = 20 * gp.tileSize;
+
+        gp.obj[5] = new OBJ_Pokebal();
+        gp.obj[5].worldX = 12 * gp.tileSize;
+        gp.obj[5].worldY = 19 * gp.tileSize;
     }
 }
