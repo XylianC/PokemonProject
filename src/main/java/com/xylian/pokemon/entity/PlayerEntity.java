@@ -19,13 +19,14 @@ public class PlayerEntity extends Entity {
 
     // Player variables
     int amountOfKeys = 0;
+    boolean hasWaterBoots = false;
 
     public PlayerEntity(GamePanel gp, InputSystem inputSystem) {
         this.gp = gp;
         this.inputSystem = inputSystem;
 
-        screenX = gp.screenWidth / 2 - gp.tileSize/2;
-        screenY = gp.screenHeight / 2- gp.tileSize/2;
+        screenX = gp.screenWidth / 2 - gp.tileSize / 2;
+        screenY = gp.screenHeight / 2 - gp.tileSize / 2;
 
         solidArea = new Rectangle();
         solidArea.x = 8;
@@ -35,8 +36,6 @@ public class PlayerEntity extends Entity {
 
         solidArea.width = 32;
         solidArea.height = 32;
-
-
 
         SetDefaultValues();
         GetPlayerImage();
@@ -51,15 +50,15 @@ public class PlayerEntity extends Entity {
     public void update() {
         GetPlayerDirection();
 
-        boolean anyPressed = inputSystem.upPressed|| inputSystem.downPressed || inputSystem.leftPressed || inputSystem.rightPressed;
+        boolean anyPressed = inputSystem.upPressed || inputSystem.downPressed || inputSystem.leftPressed || inputSystem.rightPressed;
 
-        if(anyPressed) {
+        if (anyPressed) {
             // collision code
             collision = false;
 
             gp.cChecker.CheckTile(this);
             int objectIndex = gp.cChecker.CheckObject(this, true);
-            pickUpObject(objectIndex);
+            interactWithObject(objectIndex);
 
             if (!collision) {
                 switch (direction) {
@@ -90,7 +89,7 @@ public class PlayerEntity extends Entity {
     }
 
     public void GetPlayerDirection() {
-        if(inputSystem.upPressed) {
+        if (inputSystem.upPressed) {
             direction = "up";
         } else if (inputSystem.downPressed) {
             direction = "down";
@@ -122,34 +121,34 @@ public class PlayerEntity extends Entity {
 
         switch (direction) {
             case "up":
-                if(spriteIndex == 1) {
+                if (spriteIndex == 1) {
                     image = up1;
                 }
-                if(spriteIndex == 2) {
+                if (spriteIndex == 2) {
                     image = up2;
                 }
                 break;
             case "down":
-                if(spriteIndex == 1) {
+                if (spriteIndex == 1) {
                     image = down1;
                 }
-                if(spriteIndex == 2) {
+                if (spriteIndex == 2) {
                     image = down2;
                 }
                 break;
             case "left":
-                if(spriteIndex == 1) {
+                if (spriteIndex == 1) {
                     image = left1;
                 }
-                if(spriteIndex == 2) {
+                if (spriteIndex == 2) {
                     image = left2;
                 }
                 break;
             case "right":
-                if(spriteIndex == 1) {
+                if (spriteIndex == 1) {
                     image = right1;
                 }
-                if(spriteIndex == 2) {
+                if (spriteIndex == 2) {
                     image = right2;
                 }
                 break;
@@ -157,38 +156,43 @@ public class PlayerEntity extends Entity {
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 
-    public void pickUpObject(int index) {
-        // an object cant have 999 as index, so this means no object is touched
-        if(index != 999) {
-            String objectName = gp.obj[index].name;
-
-            switch (objectName) {
-                case "Key": //pickup script for keys
-                    amountOfKeys ++;
-                    gp.obj[index] = null;
-                    break;
-                case "Door":
-                    if (amountOfKeys > 0) {
-                        amountOfKeys --;
-                        gp.obj[index].collision = false;
-                    }
-                    break;
-            }
-
-        }
-    }
-
     public void doPlayerAnimation() {
-        if(inputSystem.upPressed|| inputSystem.downPressed || inputSystem.leftPressed || inputSystem.rightPressed) {
+        if (inputSystem.upPressed || inputSystem.downPressed || inputSystem.leftPressed || inputSystem.rightPressed) {
             spriteCounter++;
-            if(spriteCounter > 15) { //every X frames it switches between sprite frames.
-                if(spriteIndex == 1) {
+            if (spriteCounter > 15) { //every X frames it switches between sprite frames.
+                if (spriteIndex == 1) {
                     spriteIndex = 2;
                 } else if (spriteIndex == 2) {
                     spriteIndex = 1;
                 }
                 spriteCounter = 0;
             }
+        }
+    }
+
+    public void interactWithObject (int index) {
+        // an object cant have 999 as index, so this means no object is touched
+        if (index != 999) {
+            String objectName = gp.obj[index].name;
+
+            switch (objectName) {
+                case "Key": //pickup script for keys
+                    amountOfKeys++;
+                    gp.obj[index] = null;
+                    gp.playSoundEffect(1);
+                    break;
+                case "Door": //script to open a door
+                    if (amountOfKeys > 0) {
+                        amountOfKeys--;
+                        gp.obj[index].collision = false;
+                    }
+                    break;
+                case "WaterBoots": //powerup item
+                    hasWaterBoots = true;
+                    speed += 2;
+                    gp.obj[index] = null;
+            }
+
         }
     }
 }
