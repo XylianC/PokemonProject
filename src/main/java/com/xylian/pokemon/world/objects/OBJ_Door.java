@@ -6,12 +6,14 @@ import java.io.IOException;
 public class OBJ_Door extends MasterObject{
     public OBJ_Door() {
         name = "Door";
-        collision = true;
+
 
         try {
             image = ImageIO.read(getClass().getResourceAsStream("/objects/spr_door.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        collision = true;
     }
 }

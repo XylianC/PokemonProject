@@ -17,6 +17,9 @@ public class PlayerEntity extends Entity {
     public final int screenX;
     public final int screenY;
 
+    // Player variables
+    int amountOfKeys = 0;
+
     public PlayerEntity(GamePanel gp, InputSystem inputSystem) {
         this.gp = gp;
         this.inputSystem = inputSystem;
@@ -24,7 +27,16 @@ public class PlayerEntity extends Entity {
         screenX = gp.screenWidth / 2 - gp.tileSize/2;
         screenY = gp.screenHeight / 2- gp.tileSize/2;
 
-        solidArea = new Rectangle(8, 16, 32, 32);
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+
+        solidArea.width = 32;
+        solidArea.height = 32;
+
+
 
         SetDefaultValues();
         GetPlayerImage();
@@ -44,7 +56,10 @@ public class PlayerEntity extends Entity {
         if(anyPressed) {
             // collision code
             collision = false;
+
             gp.cChecker.CheckTile(this);
+            int objectIndex = gp.cChecker.CheckObject(this, true);
+            pickUpObject(objectIndex);
 
             if (!collision) {
                 switch (direction) {
@@ -140,6 +155,27 @@ public class PlayerEntity extends Entity {
                 break;
         }
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+    }
+
+    public void pickUpObject(int index) {
+        // an object cant have 999 as index, so this means no object is touched
+        if(index != 999) {
+            String objectName = gp.obj[index].name;
+
+            switch (objectName) {
+                case "Key": //pickup script for keys
+                    amountOfKeys ++;
+                    gp.obj[index] = null;
+                    break;
+                case "Door":
+                    if (amountOfKeys > 0) {
+                        amountOfKeys --;
+                        gp.obj[index].collision = false;
+                    }
+                    break;
+            }
+
+        }
     }
 
     public void doPlayerAnimation() {

@@ -11,5 +11,6 @@ public class OBJ_Chest extends MasterObject{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        collision = true;
     }
 }
