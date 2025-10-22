@@ -36,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
     public TileManager tileManager = new TileManager(this);
 
     // Sound
+    public Sound music = new Sound();
     public Sound sound = new Sound();
 
     // Entity and objects
@@ -114,13 +115,13 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void playMusic(int i ) {
-        sound.setFile(i);
-        sound.play();
-        sound.loop();
+        music.setFile(i);
+        music.play();
+        music.loop();
     }
 
     public void stopMusic() {
-        sound.stop();
+        music.stop();
     }
 
     public void playSoundEffect(int i) {
