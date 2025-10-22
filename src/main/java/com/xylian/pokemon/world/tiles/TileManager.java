@@ -133,8 +133,6 @@ public class TileManager {
             tile[21] = new Tile();
             tile[21].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/spr_tiles_bridge_6.png")));
 
-
-
         } catch (IOException e) {
             System.err.println("No tile-images were found!");
         }
@@ -154,7 +152,7 @@ public class TileManager {
 
             //this if statement makes sure only tiles in the viewport are drawn
             if (worldX + gp.tileSize > gp.playerEntity.worldX - gp.playerEntity.screenX &&
-                    worldX - gp.tileSize < gp.playerEntity.worldX + gp.playerEntity.worldX &&
+                    worldX - gp.tileSize < gp.playerEntity.worldX + gp.playerEntity.screenX &&
                     worldY + gp.tileSize > gp.playerEntity.worldY - gp.playerEntity.screenY &&
                     worldY - gp.tileSize < gp.playerEntity.worldY + gp.playerEntity.screenY
             ) {

@@ -19,7 +19,7 @@ public class AssetPlacer {
 
         gp.obj[1] = new OBJ_Key();
         gp.obj[1].worldX = 23 * gp.tileSize;
-        gp.obj[1].worldY = 18 * gp.tileSize;
+        gp.obj[1].worldY = 11 * gp.tileSize;
 
         gp.obj[2] = new OBJ_Chest();
         gp.obj[2].worldX = 15 * gp.tileSize;

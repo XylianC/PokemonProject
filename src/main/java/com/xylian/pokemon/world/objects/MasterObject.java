@@ -17,7 +17,7 @@ public class MasterObject {
 
         //this if statement makes sure only tiles in the viewport are drawn
         if (worldX + gp.tileSize > gp.playerEntity.worldX - gp.playerEntity.screenX &&
-                worldX - gp.tileSize < gp.playerEntity.worldX + gp.playerEntity.worldX &&
+                worldX - gp.tileSize < gp.playerEntity.worldX + gp.playerEntity.screenX &&
                 worldY + gp.tileSize > gp.playerEntity.worldY - gp.playerEntity.screenY &&
                 worldY - gp.tileSize < gp.playerEntity.worldY + gp.playerEntity.screenY
         ) {
