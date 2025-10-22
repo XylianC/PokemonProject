@@ -15,11 +15,15 @@ public class TileManager {
     GamePanel gp;
     public Tile[] tile;
     public int mapTileIndex[][];
+    String dirMapTest = "/maps/map2.csv";
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
 
-        tile = new Tile[16];
+        int amountOfTiles = 25;
+
+
+        tile = new Tile[amountOfTiles];
         mapTileIndex = new int[gp.maxWorldCol][gp.maxWorldRow];
 
         LoadMap();
@@ -28,7 +32,7 @@ public class TileManager {
 
     public void LoadMap() {
         try {
-            InputStream is = getClass().getResourceAsStream("/maps/map2.csv");
+            InputStream is = getClass().getResourceAsStream(dirMapTest);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
@@ -110,6 +114,24 @@ public class TileManager {
 
             tile[15] = new Tile();
             tile[15].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/spr_tiles_sand_4.png")));
+
+            tile[16] = new Tile();
+            tile[16].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/spr_tiles_bridge_1.png")));
+
+            tile[17] = new Tile();
+            tile[17].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/spr_tiles_bridge_2.png")));
+
+            tile[18] = new Tile();
+            tile[18].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/spr_tiles_bridge_3.png")));
+
+            tile[19] = new Tile();
+            tile[19].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/spr_tiles_bridge_4.png")));
+
+            tile[20] = new Tile();
+            tile[20].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/spr_tiles_bridge_5.png")));
+
+            tile[21] = new Tile();
+            tile[21].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/spr_tiles_bridge_6.png")));
 
 
 
