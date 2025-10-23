@@ -21,6 +21,9 @@ public class PlayerEntity extends Entity {
     public int amountOfKeys = 0;
     public boolean hasWaterBoots = false;
 
+    boolean isMoving;
+    int pixelCounter = 0;
+
     public PlayerEntity(GamePanel gp, InputSystem inputSystem) {
         this.gp = gp;
         this.inputSystem = inputSystem;
@@ -29,13 +32,15 @@ public class PlayerEntity extends Entity {
         screenY = gp.screenHeight / 2 - gp.tileSize / 2;
 
         solidArea = new Rectangle();
+
         solidArea.x = 8;
         solidArea.y = 16;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-
         solidArea.width = 32;
         solidArea.height = 32;
+
+
 
         SetDefaultValues();
         GetPlayerImage();
@@ -48,6 +53,7 @@ public class PlayerEntity extends Entity {
     }
 
     public void update() {
+
         GetPlayerDirection();
 
         boolean anyPressed = inputSystem.upPressed || inputSystem.downPressed || inputSystem.leftPressed || inputSystem.rightPressed;
@@ -179,20 +185,35 @@ public class PlayerEntity extends Entity {
                 case "Key": //pickup script for keys
                     amountOfKeys++;
                     gp.obj[index] = null;
+                    gp.ui.showMessage("You picked up a key!");
                     //gp.playSoundEffect(1);
                     break;
+
                 case "Door": //script to open a door
                     if (amountOfKeys > 0) {
                         amountOfKeys--;
                         gp.obj[index] = null;
-                        //gp.playSoundEffect(1);
+                        gp.ui.showMessage("You opened the door!");
+                        gp.playSoundEffect(1);
+                        break;
+                    } else {
+                        gp.ui.showMessage("You need a key to open the door!");
                     }
                     break;
+
+
                 case "WaterBoots": //script as example of a power-up item
                     hasWaterBoots = true;
                     speed += 2;
                     gp.obj[index] = null;
+                    gp.ui.showMessage("You picked up the " + objectName);
+                    break;
 
+                case "Chest":
+                    gp.ui.showMessage("You opened the chest");
+                    //gp.ui.gameFinished = true;
+                    gp.stopMusic();
+                    break;
             }
         }
     }

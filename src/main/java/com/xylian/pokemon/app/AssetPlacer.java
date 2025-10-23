@@ -35,7 +35,7 @@ public class AssetPlacer {
         gp.obj[5].worldY = 22 * gp.tileSize;
 
         gp.obj[6] = new OBJ_Waterboots();
-        gp.obj[6].worldX = 23 * gp.tileSize;
-        gp.obj[6].worldY = 30 * gp.tileSize;
+        gp.obj[6].worldX = 15 * gp.tileSize;
+        gp.obj[6].worldY = 18 * gp.tileSize;
     }
 }

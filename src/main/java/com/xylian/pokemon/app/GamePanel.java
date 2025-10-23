@@ -7,7 +7,6 @@ import com.xylian.pokemon.world.tiles.Tile;
 import com.xylian.pokemon.world.tiles.TileManager;
 
 import java.awt.*;
-
 import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -30,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
     int fps = 60;
 
     InputSystem input = new InputSystem();
-    Thread gameThread;
+    public Thread gameThread;
 
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetPlacer aPlacer = new AssetPlacer(this);
@@ -57,7 +56,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void SetupLevel() {
         aPlacer.SetObject();
-        //playMusic(0);
+        playMusic(0);
     }
 
     public void startGameThread() {
