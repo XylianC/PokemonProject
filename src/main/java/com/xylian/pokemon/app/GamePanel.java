@@ -1,6 +1,7 @@
 package com.xylian.pokemon.app;
 
 import com.xylian.pokemon.entity.PlayerEntity;
+import com.xylian.pokemon.ui.UICanvas;
 import com.xylian.pokemon.world.objects.MasterObject;
 import com.xylian.pokemon.world.tiles.Tile;
 import com.xylian.pokemon.world.tiles.TileManager;
@@ -34,6 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetPlacer aPlacer = new AssetPlacer(this);
     public TileManager tileManager = new TileManager(this);
+    public UICanvas ui = new UICanvas(this);
 
     // Sound
     public Sound music = new Sound();
@@ -55,7 +57,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void SetupLevel() {
         aPlacer.SetObject();
-        playMusic(0);
+        //playMusic(0);
     }
 
     public void startGameThread() {
@@ -110,6 +112,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         playerEntity.draw(g2);
+        ui.draw(g2);
 
         g2.dispose();
     }

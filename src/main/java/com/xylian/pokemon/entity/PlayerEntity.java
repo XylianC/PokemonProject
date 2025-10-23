@@ -18,8 +18,8 @@ public class PlayerEntity extends Entity {
     public final int screenY;
 
     // Player variables
-    int amountOfKeys = 0;
-    boolean hasWaterBoots = false;
+    public int amountOfKeys = 0;
+    public boolean hasWaterBoots = false;
 
     public PlayerEntity(GamePanel gp, InputSystem inputSystem) {
         this.gp = gp;
@@ -42,7 +42,7 @@ public class PlayerEntity extends Entity {
     }
 
     public void SetDefaultValues() {
-        worldX = gp.tileSize * 20;
+        worldX = gp.tileSize * 16;
         worldY = gp.tileSize * 20;
         speed = 4;
     }
@@ -170,7 +170,7 @@ public class PlayerEntity extends Entity {
         }
     }
 
-    public void interactWithObject (int index) {
+    public void interactWithObject(int index) {
         // an object cant have 999 as index, so this means no object is touched
         if (index != 999) {
             String objectName = gp.obj[index].name;
@@ -179,20 +179,21 @@ public class PlayerEntity extends Entity {
                 case "Key": //pickup script for keys
                     amountOfKeys++;
                     gp.obj[index] = null;
-                    gp.playSoundEffect(1);
+                    //gp.playSoundEffect(1);
                     break;
                 case "Door": //script to open a door
                     if (amountOfKeys > 0) {
                         amountOfKeys--;
-                        gp.obj[index].collision = false;
+                        gp.obj[index] = null;
+                        //gp.playSoundEffect(1);
                     }
                     break;
-                case "WaterBoots": //powerup item
+                case "WaterBoots": //script as example of a power-up item
                     hasWaterBoots = true;
                     speed += 2;
                     gp.obj[index] = null;
-            }
 
+            }
         }
     }
 }

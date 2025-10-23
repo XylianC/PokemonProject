@@ -24,15 +24,15 @@ public class AssetPlacer {
 
         gp.obj[3] = new OBJ_Door();
         gp.obj[3].worldX = 7 * gp.tileSize;
-        gp.obj[3].worldY = 20 * gp.tileSize;
+        gp.obj[3].worldY = 23 * gp.tileSize;
 
         gp.obj[4] = new OBJ_Chest();
-        gp.obj[4].worldX = 12 * gp.tileSize;
-        gp.obj[4].worldY = 20 * gp.tileSize;
+        gp.obj[4].worldX = 10 * gp.tileSize;
+        gp.obj[4].worldY = 23 * gp.tileSize;
 
         gp.obj[5] = new OBJ_Pokebal();
-        gp.obj[5].worldX = 12 * gp.tileSize;
-        gp.obj[5].worldY = 19 * gp.tileSize;
+        gp.obj[5].worldX = 10 * gp.tileSize;
+        gp.obj[5].worldY = 22 * gp.tileSize;
 
         gp.obj[6] = new OBJ_Waterboots();
         gp.obj[6].worldX = 23 * gp.tileSize;
