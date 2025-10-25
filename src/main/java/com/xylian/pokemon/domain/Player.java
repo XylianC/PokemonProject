@@ -2,7 +2,7 @@ package com.xylian.pokemon.domain;
 
 import com.xylian.pokemon.entity.Entity;
 
-public class Player extends Entity {
+public class Player{
 
     private String name;
     private String starter;

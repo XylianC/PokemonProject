@@ -3,14 +3,10 @@ package com.xylian.pokemon.entity;
 import com.xylian.pokemon.app.GamePanel;
 import com.xylian.pokemon.app.InputSystem;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 
 public class PlayerEntity extends Entity {
-    GamePanel gp;
     InputSystem inputSystem;
 
     //to see where in the screen the entity should be rendered;
@@ -18,14 +14,11 @@ public class PlayerEntity extends Entity {
     public final int screenY;
 
     // Player variables
-    public int amountOfKeys = 0;
     public boolean hasWaterBoots = false;
 
-    boolean isMoving;
-    int pixelCounter = 0;
 
     public PlayerEntity(GamePanel gp, InputSystem inputSystem) {
-        this.gp = gp;
+        super(gp);
         this.inputSystem = inputSystem;
 
         screenX = gp.screenWidth / 2 - gp.tileSize / 2;
@@ -33,20 +26,18 @@ public class PlayerEntity extends Entity {
 
         solidArea = new Rectangle();
 
-        solidArea.x = 8;
-        solidArea.y = 16;
+        solidArea.x = 12;
+        solidArea.y = 24;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        solidArea.width = 32;
-        solidArea.height = 32;
+        solidArea.width = 20;
+        solidArea.height = 20;
 
-
-
-        SetDefaultValues();
-        GetPlayerImage();
+        setDefaultValues();
+        getPlayerImage();
     }
 
-    public void SetDefaultValues() {
+    public void setDefaultValues() {
         worldX = gp.tileSize * 16;
         worldY = gp.tileSize * 20;
         speed = 4;
@@ -54,36 +45,28 @@ public class PlayerEntity extends Entity {
 
     public void update() {
 
-        GetPlayerDirection();
+        getPlayerDirection();
 
         boolean anyPressed = inputSystem.upPressed || inputSystem.downPressed || inputSystem.leftPressed || inputSystem.rightPressed;
 
         if (anyPressed) {
             // collision code
             collision = false;
+            gp.cChecker.checkTile(this);
 
-            gp.cChecker.CheckTile(this);
-            int objectIndex = gp.cChecker.CheckObject(this, true);
+            // check object collision
+            int objectIndex = gp.cChecker.checkObject(this, true);
             interactWithObject(objectIndex);
 
+            // check npc collision
+            int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
+            interactWithNPC(npcIndex);
+
             if (!collision) {
-                switch (direction) {
-                    case "up":
-                        worldY -= speed;
-                        break;
-                    case "down":
-                        worldY += speed;
-                        break;
-                    case "left":
-                        worldX -= speed;
-                        break;
-                    case "right":
-                        worldX += speed;
-                        break;
-                }
+                doPlayerMovement();
+                doPlayerAnimation();
             }
 
-            doPlayerAnimation();
         } else {
             spriteIndex = 1;
             spriteCounter = 0;
@@ -91,10 +74,10 @@ public class PlayerEntity extends Entity {
     }
 
     public void draw(Graphics2D g2) {
-        SetPlayerImages(g2);
+        setPlayerImages(g2);
     }
 
-    public void GetPlayerDirection() {
+    public void getPlayerDirection() {
         if (inputSystem.upPressed) {
             direction = "up";
         } else if (inputSystem.downPressed) {
@@ -106,23 +89,18 @@ public class PlayerEntity extends Entity {
         }
     }
 
-    public void GetPlayerImage() {
-        try {
-            up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_up1.png")));
-            up2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_up2.png")));
-            down1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_down1.png")));
-            down2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_down2.png")));
-            left1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_left1.png")));
-            left2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_left2.png")));
-            right1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_right1.png")));
-            right2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_right2.png")));
-
-        } catch (IOException e) {
-            System.err.println("No images were found");
-        }
+    public void getPlayerImage() {
+        up1 = setUp("up1");
+        up2 = setUp("up2");
+        down1 = setUp("down1");
+        down2 = setUp("down2");
+        left1 = setUp("left1");
+        left2 = setUp("left2");
+        right1 = setUp("right1");
+        right2 = setUp("right2");
     }
 
-    public void SetPlayerImages(Graphics2D g2) {
+    public void setPlayerImages(Graphics2D g2) {
         BufferedImage image = null;
 
         switch (direction) {
@@ -159,7 +137,28 @@ public class PlayerEntity extends Entity {
                 }
                 break;
         }
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+
+        int x = screenX;
+        int y = screenY;
+
+        if(screenX > worldX) {
+            x = worldX;
+        }
+        if(screenY > worldY) {
+            y = worldY;
+        }
+
+        int rightOffset = gp.screenWidth - screenX;
+        if(rightOffset > gp.worldWidth - worldX) {
+            x = gp.screenWidth - (gp.worldWidth - worldX);
+        }
+
+        int bottomOffset = gp.screenHeight - screenY;
+        if (bottomOffset > gp.worldHeight - worldY) {
+            y = gp.screenHeight - (gp.worldHeight - worldY);
+        }
+
+        g2.drawImage(image, x, y, null);
     }
 
     public void doPlayerAnimation() {
@@ -176,45 +175,40 @@ public class PlayerEntity extends Entity {
         }
     }
 
+    public void doPlayerMovement() {
+        switch (direction) {
+            case "up":
+                worldY -= speed;
+                break;
+            case "down":
+                worldY += speed;
+                break;
+            case "left":
+                worldX -= speed;
+                break;
+            case "right":
+                worldX += speed;
+                break;
+        }
+    }
+
     public void interactWithObject(int index) {
-        // an object cant have 999 as index, so this means no object is touched
+        // an object or npc MAY NOT have 999 as index
+        // so this means no object is touched
         if (index != 999) {
-            String objectName = gp.obj[index].name;
+            // Do nothing for now
+        }
+    }
 
-            switch (objectName) {
-                case "Key": //pickup script for keys
-                    amountOfKeys++;
-                    gp.obj[index] = null;
-                    gp.ui.showMessage("You picked up a key!");
-                    //gp.playSoundEffect(1);
-                    break;
+    public void interactWithNPC(int index) {
+        if(index != 999) {
+            gp.npc[index].canMove = false;
 
-                case "Door": //script to open a door
-                    if (amountOfKeys > 0) {
-                        amountOfKeys--;
-                        gp.obj[index] = null;
-                        gp.ui.showMessage("You opened the door!");
-                        gp.playSoundEffect(1);
-                        break;
-                    } else {
-                        gp.ui.showMessage("You need a key to open the door!");
-                    }
-                    break;
-
-
-                case "WaterBoots": //script as example of a power-up item
-                    hasWaterBoots = true;
-                    speed += 2;
-                    gp.obj[index] = null;
-                    gp.ui.showMessage("You picked up the " + objectName);
-                    break;
-
-                case "Chest":
-                    gp.ui.showMessage("You opened the chest");
-                    //gp.ui.gameFinished = true;
-                    gp.stopMusic();
-                    break;
+            if (gp.input.interactionPressed) {
+                gp.gameState = gp.dialogueState;
+                gp.npc[index].speak();
             }
         }
+        gp.input.interactionPressed = false;
     }
 }

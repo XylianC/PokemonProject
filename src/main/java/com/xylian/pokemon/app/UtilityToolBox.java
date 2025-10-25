@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class UtilityToolBox {
+
     public BufferedImage scaleImage(BufferedImage original, int width, int height) {
         BufferedImage scaledImage = new BufferedImage(width, height, original.getType());
         Graphics2D g2 = scaledImage.createGraphics();
@@ -12,4 +13,6 @@ public class UtilityToolBox {
 
         return scaledImage;
     }
+
+
 }

@@ -28,7 +28,7 @@ public class TileManager {
         mapTileIndex = new int[gp.maxWorldCol][gp.maxWorldRow];
 
         LoadMap();
-        GetTileImage();
+        GetTileImages();
     }
 
     public void LoadMap() {
@@ -59,7 +59,7 @@ public class TileManager {
         }
     }
 
-    public void GetTileImage() {
+    public void GetTileImages() {
         BufferedImage image = null;
 
         final int rows = 8;
@@ -92,10 +92,8 @@ public class TileManager {
 
         } catch (NullPointerException e) {
             System.err.println("[TileManager] Resource not found for index " + index + " -> " + imagePath);
-            e.printStackTrace();
         } catch (IOException e) {
             System.err.println("[TileManager] Failed to read image for index " + index + " -> " + imagePath);
-            e.printStackTrace();
         }
     }
 
@@ -111,13 +109,35 @@ public class TileManager {
             int screenX = worldX - gp.playerEntity.worldX + gp.playerEntity.screenX;
             int screenY = worldY - gp.playerEntity.worldY + gp.playerEntity.screenY;
 
+            // this prevents the camera from going out of bounds
+            if(gp.playerEntity.screenX > gp.playerEntity.worldX) {
+                screenX = worldX;
+            }
+            if(gp.playerEntity.screenY > gp.playerEntity.worldY) {
+                screenY = worldY;
+            }
+
+            int rightOffset = gp.screenWidth - gp.playerEntity.screenX;
+            if(rightOffset > gp.worldWidth - gp.playerEntity.worldX) {
+                screenX = gp.screenWidth - (gp.worldWidth - worldX);
+            }
+
+            int bottomOffset = gp.screenHeight - gp.playerEntity.screenY;
+            if (bottomOffset > gp.worldHeight - gp.playerEntity.worldY) {
+                screenY = gp.screenHeight - (gp.worldHeight - worldY);
+            }
+
             //this if statement makes sure only tiles in the viewport are drawn
             if (worldX + gp.tileSize > gp.playerEntity.worldX - gp.playerEntity.screenX &&
                     worldX - gp.tileSize < gp.playerEntity.worldX + gp.playerEntity.screenX &&
                     worldY + gp.tileSize > gp.playerEntity.worldY - gp.playerEntity.screenY &&
-                    worldY - gp.tileSize < gp.playerEntity.worldY + gp.playerEntity.screenY
-            ) {
+                    worldY - gp.tileSize < gp.playerEntity.worldY + gp.playerEntity.screenY) {
                 //this code draws the tile to the screen.
+                g2.drawImage(tile[tileIndex].image, screenX, screenY, null);
+            } else if (gp.playerEntity.screenX > gp.playerEntity.worldX ||
+                    gp.playerEntity.screenY > gp.playerEntity.worldY ||
+                    rightOffset > gp.worldWidth - gp.playerEntity.worldX ||
+                    bottomOffset > gp.worldHeight - gp.playerEntity.worldY) {
                 g2.drawImage(tile[tileIndex].image, screenX, screenY, null);
             }
                 worldCol++;
