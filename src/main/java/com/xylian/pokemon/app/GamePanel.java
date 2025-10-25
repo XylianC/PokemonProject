@@ -4,7 +4,6 @@ import com.xylian.pokemon.entity.Entity;
 import com.xylian.pokemon.entity.PlayerEntity;
 import com.xylian.pokemon.ui.UICanvas;
 import com.xylian.pokemon.world.objects.MasterObject;
-import com.xylian.pokemon.world.tiles.Tile;
 import com.xylian.pokemon.world.tiles.TileManager;
 
 import java.awt.*;
@@ -24,7 +23,6 @@ public class GamePanel extends JPanel implements Runnable {
     // world map settings
     public final int maxWorldCol = 72;
     public final int maxWorldRow = 54;
-
 
     public final int worldWidth = tileSize * maxWorldCol;
     public final int worldHeight = tileSize * maxWorldRow;
@@ -53,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // Game states
     public int gameState;
+    public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
@@ -69,7 +68,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
     }
 
-    public void SetupLevel() {
+    public void setupGame() {
         aPlacer.SetObject();
         aPlacer.SetNPC();
 
@@ -89,9 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
         double nextDrawTime = System.nanoTime() + drawInterval;
 
         while (gameThread != null) {
-
             update();
-
             repaint();
 
             try {
@@ -132,25 +129,36 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D)g;
+        Graphics2D g2 = (Graphics2D) g;
 
-        tileManager.draw(g2);
-
-        for(int i = 0; i < obj.length; i++) {
-            if(obj[i] != null) {
-                obj[i].draw(g2, this);
-            }
+        // Draw Title Screen
+        if (gameState == titleState) {
+            ui.draw(g2);
         }
 
-        // draw npc's
-        for(int i = 0; i < npc.length; i++) {
-            if(npc[i] != null) {
-                npc[i].draw(g2);
+        else if (gameState == playState || gameState == pauseState){
+            tileManager.draw(g2);
+
+            for (int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
+                    obj[i].draw(g2, this);
+                }
             }
+
+            // draw npc's
+            for (int i = 0; i < npc.length; i++) {
+                if (npc[i] != null) {
+                    npc[i].draw(g2);
+                }
+            }
+
+            playerEntity.draw(g2);
+            ui.draw(g2);
         }
 
-        playerEntity.draw(g2);
-        ui.draw(g2);
+        else if (gameState == battleState) {
+            ui.draw(g2);
+        }
 
         g2.dispose();
     }

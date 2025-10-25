@@ -18,25 +18,29 @@ public class Entity {
         solidAreaDefaultY = solidArea.y;
     }
 
+    // Declaration of position and movement variables
     public int worldX, worldY;
     public int speed;
     public boolean canMove = true;
 
+    // Declaration of entity image variables
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public String direction = "down";
-
     public int spriteCounter = 0;
     public int spriteIndex = 1;
 
+    // Declaration of entity collision variables
     public Rectangle solidArea = new Rectangle(12,24,20,20);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collision = false;
 
+    // Declaration of entity AI variables
     public int actionLoopCounter = 0;
 
-    // Dialogues
+    // Declaratin of entity dialogue variables
     public String dialogues[] = new String[20];
     public int dialogueIndex = 0;
+
 
     public void setAction() {
 
@@ -80,6 +84,33 @@ public class Entity {
         }
     }
 
+    public void speak() {
+        if (dialogues[dialogueIndex] == null) {
+            dialogueIndex = 0;
+        }
+
+        gp.ui.currentDialogue = dialogues[dialogueIndex];
+        dialogueIndex++;
+        lookAtPlayer();
+    }
+
+    public void lookAtPlayer() {
+        switch (gp.playerEntity.direction) {
+            case "up":
+                direction = "down";
+                break;
+            case "down":
+                direction = "up";
+                break;
+            case "left":
+                direction = "right";
+                break;
+            case "right":
+                direction = "left";
+                break;
+        }
+    }
+
     public void playAnimation() {
         spriteCounter++;
         if (spriteCounter > 15) { //every X frames it switches between sprite frames.
@@ -90,6 +121,18 @@ public class Entity {
             }
             spriteCounter = 0;
         }
+    }
+
+    public BufferedImage setUp(String imageName) {
+        UtilityToolBox uTool = new UtilityToolBox();
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_" + imageName + ".png")));
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 
     public void draw(Graphics2D g2) {
@@ -141,45 +184,6 @@ public class Entity {
 
             //this code draws the tile to the screen.
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
-        }
-    }
-
-    public BufferedImage setUp(String imageName) {
-        UtilityToolBox uTool = new UtilityToolBox();
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_" + imageName + ".png")));
-            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return image;
-    }
-
-    public void speak() {
-        if (dialogues[dialogueIndex] == null) {
-            dialogueIndex = 0;
-        }
-
-        gp.ui.currentDialogue = dialogues[dialogueIndex];
-        dialogueIndex++;
-        lookAtPlayer();
-    }
-
-    public void lookAtPlayer() {
-        switch (gp.playerEntity.direction) {
-            case "up":
-                direction = "down";
-                break;
-            case "down":
-                direction = "up";
-                break;
-            case "left":
-                direction = "right";
-                break;
-            case "right":
-                direction = "left";
-                break;
         }
     }
 

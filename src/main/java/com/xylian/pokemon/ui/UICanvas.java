@@ -1,10 +1,8 @@
 package com.xylian.pokemon.ui;
 
 import com.xylian.pokemon.app.GamePanel;
-import com.xylian.pokemon.world.objects.OBJ_Key;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -47,19 +45,32 @@ public class UICanvas {
         g2.setFont(fnt_PixelOperator);
         g2.setColor(Color.white);
 
+
+        if(gp.gameState == gp.titleState) {
+            setFontSize(80);
+            drawTitleScreen();
+        }
+
         // Play State
         if(gp.gameState == gp.playState) {
-            drawUserInterface();
+            drawOverworldInterface();
         }
 
         // Pause State - Maybe i can add menu functions here?
         if(gp.gameState == gp.pauseState) {
-            drawPauseScreen();
+            setFontSize(200);
+            drawMenuScreen();
         }
 
         // Dialogue State
         if(gp.gameState == gp.dialogueState) {
             drawDialogWindow();
+        }
+
+        // Battle State
+        if(gp.gameState == gp.battleState) {
+            setFontSize(80);
+            drawBattleScreen();
         }
     }
 
@@ -68,17 +79,33 @@ public class UICanvas {
         messageOn = true;
     }
 
-    public void drawPauseScreen() {
+    public void drawTitleScreen() {
+        String text = "Pokepals";
+        int x = getTextCenterOnScreen(text);
+        int y = gp.screenHeight / 2;
+        g2.drawString(text, x, y);
+    }
+
+    public void drawOverworldInterface() {
+
+    }
+
+    public void drawMenuScreen() {
         String text = "PAUSED";
         int x = getTextCenterOnScreen(text);
-        int y = gp.screenHeight /2;
+        int y = gp.screenHeight /2 - (gp.tileSize);
 
         g2.drawString(text, x, y);
     }
 
-    public void drawUserInterface() {
-
+    public void drawBattleScreen() {
+        String text = "Battlescene";
+        int x = getTextCenterOnScreen(text);
+        int y = gp.screenHeight / 2;
+        g2.drawString(text, x, y);
     }
+
+
 
     public void drawDialogWindow() {
         // Window paramaters
@@ -92,7 +119,7 @@ public class UICanvas {
         x += gp.tileSize;
         y += gp.tileSize + 10;
 
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 40));
+        setFontSize(40);
         for (String line : currentDialogue.split("\n")) {
             g2.drawString(line, x, y);
             y += 40;
@@ -117,4 +144,7 @@ public class UICanvas {
         return centerPosition;
     }
 
+    public void setFontSize(int fontSize) {
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, fontSize));
+    }
 }
