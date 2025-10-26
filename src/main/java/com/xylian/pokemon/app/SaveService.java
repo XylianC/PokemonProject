@@ -1,4 +1,4 @@
-package com.xylian.pokemon.save;
+package com.xylian.pokemon.app;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

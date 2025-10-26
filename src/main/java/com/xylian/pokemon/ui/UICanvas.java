@@ -66,7 +66,6 @@ public class UICanvas {
 
         // Pause State - Maybe i can add menu functions here?
         if(gp.gameState == gp.pauseState) {
-            setFontSize(200);
             drawMenuScreen();
         }
 
@@ -77,7 +76,6 @@ public class UICanvas {
 
         // Battle State
         if(gp.gameState == gp.battleState) {
-            setFontSize(80);
             drawBattleScreen();
         }
     }
@@ -248,28 +246,56 @@ public class UICanvas {
     }
 
     public void drawBattleScreen() {
-        // Draw white background
-        g2.setColor(new Color(255, 255, 255));
+        // Draw RGB background
+        g2.setColor(new Color(100, 180, 255));
         g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        setFontSize(40);
 
-        // Draw the pokemen to the scrin
+        // Draw Player Pokemon
         int playerMonX = gp.tileSize * 3;
         int playerMonY = gp.tileSize * 7;
+        String playerMonName = "BIG BALL OF FIRE";
+
         g2.drawImage(new NPC_MonsterTest(gp).down1, playerMonX, playerMonY, gp.tileSize * 5, gp.tileSize * 5, null);
 
+        int width = gp.tileSize * 7;
+        int height = gp.tileSize * 2;
+        int x = gp.screenWidth - (gp.tileSize * 8);
+        int y = gp.tileSize * 10;
+        drawSubWindow(x, y, width, height);
+
+        x += gp.tileSize - gp.tileSize / 2;
+        y += gp.tileSize;
+
+        g2.setColor(Color.white);
+        g2.drawString(playerMonName, x, y);
+
+        // Draw Opponent Pokemon
         int opponentMonX = gp.tileSize * 15;
         int opponentMonY = gp.tileSize * 2;
-        g2.drawImage(new NPC_MonsterTest(gp).down1, opponentMonX, opponentMonY, gp.tileSize * 5, gp.tileSize * 5, null);
+                String opponentMonName = "BIG BLOB OF FOIR";
+        g2.drawImage(new NPC_MonsterTest(gp).left1, opponentMonX, opponentMonY, gp.tileSize * 5, gp.tileSize * 5, null);
 
-        // Battle screen
+        x = gp.tileSize;
+        y = gp.tileSize * 2;
+        drawSubWindow(x, y, width, height);
+
+        x += gp.tileSize - gp.tileSize / 2;
+        y += gp.tileSize;
+
+        g2.setColor(Color.white);
+        g2.drawString(opponentMonName, x , y);
+
         String text = "";
 
-        int margin = gp.tileSize;
-        int width = gp.tileSize * 7;
-        int height = gp.tileSize * 4;
-        int x = gp.screenWidth - (gp.tileSize * 8);
-        int y = gp.tileSize * 13;
+        // Battle Dialogue
+        currentDialogue = "You are now fighting!";
+        drawBattleDialogWindow();
 
+        width = gp.tileSize * 7;
+        height = gp.tileSize * 4;
+        x = gp.screenWidth - (gp.tileSize * 8);
+        y = gp.tileSize * 13;
         drawSubWindow(x, y, width, height);
 
         // Draw Text and cursor
@@ -313,12 +339,7 @@ public class UICanvas {
         if (battleMenuIndex == 3) {
             g2.drawString(">", x - gp.tileSize / 2, y);
         }
-
-        currentDialogue = "You are now fighting!";
-        drawBattleDialogWindow();
     }
-
-
 
     public void drawDialogWindow() {
         // Window paramaters
@@ -341,9 +362,9 @@ public class UICanvas {
 
     public void drawBattleDialogWindow() {
         // Window paramaters
-        int x = gp.tileSize * 2;
+        int x = gp.tileSize * 1;
         int y = gp.tileSize * 13;
-        int width = gp.screenWidth - (gp.tileSize * 10);
+        int width = gp.tileSize * 15;
         int height = gp.tileSize * 4;
 
         drawSubWindow(x, y, width, height);

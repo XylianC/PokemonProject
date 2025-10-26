@@ -57,8 +57,6 @@ public class InputSystem implements KeyListener {
             }
         }
 
-
-
         // Play State
         if (gp.gameState == gp.playState) {
             if (code == KeyEvent.VK_Z) {
@@ -82,7 +80,7 @@ public class InputSystem implements KeyListener {
         }
 
         // Pause State
-        else if (gp.gameState == gp.pauseState) {
+        if (gp.gameState == gp.pauseState) {
             if (code == KeyEvent.VK_ESCAPE) {
                 gp.gameState = gp.playState;
             }
@@ -101,14 +99,14 @@ public class InputSystem implements KeyListener {
         }
 
         // Dialogue State;
-        else if (gp.gameState == gp.dialogueState) {
+        if (gp.gameState == gp.dialogueState) {
             if (code == KeyEvent.VK_SPACE) {
                 gp.gameState = gp.playState;
             }
         }
 
         // Battle State
-        else if (gp.gameState == gp.battleState) {
+        if (gp.gameState == gp.battleState) {
             if(code == KeyEvent.VK_UP || code == KeyEvent.VK_Z) {
                 gp.ui.battleMenuIndex--;
                 if (gp.ui.battleMenuIndex < 0) {

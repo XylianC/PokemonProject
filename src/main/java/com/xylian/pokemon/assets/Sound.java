@@ -1,8 +1,7 @@
-package com.xylian.pokemon.app;
+package com.xylian.pokemon.assets;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 
 public class Sound {

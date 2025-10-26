@@ -1,5 +1,6 @@
 package com.xylian.pokemon.app;
 
+import com.xylian.pokemon.assets.Sound;
 import com.xylian.pokemon.entity.Entity;
 import com.xylian.pokemon.entity.PlayerEntity;
 import com.xylian.pokemon.ui.UICanvas;
@@ -163,6 +164,7 @@ public class GamePanel extends JPanel implements Runnable {
         g2.dispose();
     }
 
+    // Other functions
     public void playMusic(int i ) {
         music.setFile(i);
         music.play();
@@ -177,6 +179,4 @@ public class GamePanel extends JPanel implements Runnable {
         sound.setFile(i);
         sound.play();
     }
-
 }
-
