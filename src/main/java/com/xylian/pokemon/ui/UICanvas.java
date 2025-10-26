@@ -161,6 +161,7 @@ public class UICanvas {
             int y = gp.screenHeight / 2 - (gp.tileSize * 2);
             g2.drawImage(new OBJ_Pokebal(gp).image, x, y, gp.tileSize * 4, gp.tileSize * 4, null);
 
+            // Display Intro Text
             switch (introStep) {
                 case 0: {
                     currentDialogue = "Welcome to the world of Pokemon\nAre you a boy, or a girl?";
@@ -175,7 +176,7 @@ public class UICanvas {
                     break;
                 }
                 case 2: {
-                    currentDialogue = "In this world, people live together in harmony side\nby side, with Pokemon! Some use them for battling,\n some use them as pets.";
+                    currentDialogue = "In this world, people live together in harmony side\nby side, with Pokemon! Some use them for battling,\nsome use them as pets.";
                     drawDialogWindow();
                     break;
                 }
