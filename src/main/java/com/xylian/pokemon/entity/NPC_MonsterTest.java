@@ -2,12 +2,12 @@ package com.xylian.pokemon.entity;
 
 import com.xylian.pokemon.app.GamePanel;
 
-import java.awt.*;
 import java.util.Random;
 
-public class NPC_Test extends Entity {
+public class NPC_MonsterTest extends Entity {
+    GamePanel gp;
 
-    public NPC_Test(GamePanel gp) {
+    public NPC_MonsterTest(GamePanel gp) {
         super(gp);
 
         direction = "down";
@@ -15,19 +15,21 @@ public class NPC_Test extends Entity {
 
         getNPCImages();
         setDialogue();
+
+        isMonster = true;
     }
 
     public void getNPCImages() {
-        String directory = "/player/spr_player_";
+        String directory = "/monster/spr_monster1_";
 
-        up1 = setUp(directory,"up1");
-        up2 = setUp(directory,"up2");
-        down1 = setUp(directory,"down1");
-        down2 = setUp(directory,"down2");
-        left1 = setUp(directory,"left1");
-        left2 = setUp(directory,"left2");
-        right1 = setUp(directory,"right1");
-        right2 = setUp(directory,"right2");
+        up1 = setUp(directory,"1");
+        up2 = setUp(directory,"2");
+        down1 = setUp(directory,"3");
+        down2 = setUp(directory,"4");
+        left1 = setUp(directory,"5");
+        left2 = setUp(directory,"6");
+        right1 = setUp(directory,"7");
+        right2 = setUp(directory,"8");
     }
 
     public void setDialogue() {
@@ -63,3 +65,5 @@ public class NPC_Test extends Entity {
         super.speak();
     }
 }
+
+

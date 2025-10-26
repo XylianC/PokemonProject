@@ -1,5 +1,6 @@
 package com.xylian.pokemon.app;
 
+import com.xylian.pokemon.entity.NPC_MonsterTest;
 import com.xylian.pokemon.entity.NPC_Test;
 import com.xylian.pokemon.world.objects.*;
 
@@ -44,5 +45,9 @@ public class AssetPlacer {
         gp.npc[0] = new NPC_Test(gp);
         gp.npc[0].worldX = gp.tileSize * 15;
         gp.npc[0].worldY = gp.tileSize * 22;
+
+        gp.npc[1] = new NPC_MonsterTest(gp);
+        gp.npc[1].worldX = gp.tileSize * 16;
+        gp.npc[1].worldY = gp.tileSize * 22;
     }
 }

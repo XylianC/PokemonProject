@@ -90,14 +90,16 @@ public class PlayerEntity extends Entity {
     }
 
     public void getPlayerImage() {
-        up1 = setUp("up1");
-        up2 = setUp("up2");
-        down1 = setUp("down1");
-        down2 = setUp("down2");
-        left1 = setUp("left1");
-        left2 = setUp("left2");
-        right1 = setUp("right1");
-        right2 = setUp("right2");
+        String directory = "/player/spr_player_";
+
+        up1 = setUp(directory,"up1");
+        up2 = setUp(directory,"up2");
+        down1 = setUp(directory,"down1");
+        down2 = setUp(directory,"down2");
+        left1 = setUp(directory,"left1");
+        left2 = setUp(directory,"left2");
+        right1 = setUp(directory,"right1");
+        right2 = setUp(directory,"right2");
     }
 
     public void setPlayerImages(Graphics2D g2) {

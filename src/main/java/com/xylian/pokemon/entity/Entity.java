@@ -28,6 +28,8 @@ public class Entity {
     public String direction = "down";
     public int spriteCounter = 0;
     public int spriteIndex = 1;
+    public boolean isMonster = false;
+    public boolean isIdle = false;
 
     // Declaration of entity collision variables
     public Rectangle solidArea = new Rectangle(12,24,20,20);
@@ -47,7 +49,7 @@ public class Entity {
     }
 
     public void update() {
-        if(canMove) {
+        if(canMove && !isMonster) {
             setAction();
         }
 
@@ -56,14 +58,20 @@ public class Entity {
         gp.cChecker.checkObject(this, false);
         gp.cChecker.checkPlayer(this);
 
-        if (!collision) {
-            if (canMove) {
-                doMovement();
-                playAnimation();
+        if(!isMonster) {
+            if (!collision) {
+                if (canMove) {
+                    doMovement();
+                    playAnimation();
+                }
+            } else {
+                spriteIndex = 1;
+                spriteCounter = 0;
             }
-        } else {
-            spriteIndex = 1;
-            spriteCounter = 0;
+        }
+
+        if(isMonster) {
+            playIdleAnimation();
         }
     }
 
@@ -112,6 +120,7 @@ public class Entity {
     }
 
     public void playAnimation() {
+        isIdle = false;
         spriteCounter++;
         if (spriteCounter > 15) { //every X frames it switches between sprite frames.
             if (spriteIndex == 1) {
@@ -123,16 +132,31 @@ public class Entity {
         }
     }
 
-    public BufferedImage setUp(String imageName) {
+    public void playIdleAnimation() {
+        isIdle = true;
+        spriteCounter++;
+        if (spriteCounter > 5) {
+            spriteIndex++;
+
+            if (spriteIndex > 7) {
+                spriteIndex = 1;
+            }
+            spriteCounter = 0;
+        }
+
+    }
+
+    public BufferedImage setUp(String directory, String imageName) {
         UtilityToolBox uTool = new UtilityToolBox();
         BufferedImage image = null;
         try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/spr_player_" + imageName + ".png")));
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(directory + imageName + ".png")));
             image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return image;
+
     }
 
     public void draw(Graphics2D g2) {
@@ -147,40 +171,69 @@ public class Entity {
                 worldY + gp.tileSize > gp.playerEntity.worldY - gp.playerEntity.screenY &&
                 worldY - gp.tileSize < gp.playerEntity.worldY + gp.playerEntity.screenY
         ) {
-            switch (direction) {
-                case "up":
-                    if (spriteIndex == 1) {
-                        image = up1;
-                    }
-                    if (spriteIndex == 2) {
-                        image = up2;
-                    }
-                    break;
-                case "down":
-                    if (spriteIndex == 1) {
-                        image = down1;
-                    }
-                    if (spriteIndex == 2) {
-                        image = down2;
-                    }
-                    break;
-                case "left":
-                    if (spriteIndex == 1) {
-                        image = left1;
-                    }
-                    if (spriteIndex == 2) {
-                        image = left2;
-                    }
-                    break;
-                case "right":
-                    if (spriteIndex == 1) {
-                        image = right1;
-                    }
-                    if (spriteIndex == 2) {
-                        image = right2;
-                    }
-                    break;
+            if(!isIdle) {
+                switch (direction) {
+                    case "up":
+                        if (spriteIndex == 1) {
+                            image = up1;
+                        }
+                        if (spriteIndex == 2) {
+                            image = up2;
+                        }
+                        break;
+                    case "down":
+                        if (spriteIndex == 1) {
+                            image = down1;
+                        }
+                        if (spriteIndex == 2) {
+                            image = down2;
+                        }
+                        break;
+                    case "left":
+                        if (spriteIndex == 1) {
+                            image = left1;
+                        }
+                        if (spriteIndex == 2) {
+                            image = left2;
+                        }
+                        break;
+                    case "right":
+                        if (spriteIndex == 1) {
+                            image = right1;
+                        }
+                        if (spriteIndex == 2) {
+                            image = right2;
+                        }
+                        break;
+                }
             }
+            if (isIdle) {
+                if (spriteIndex == 1) {
+                    image = up1;
+                }
+                if (spriteIndex == 2) {
+                    image = up2;
+                }
+                if (spriteIndex == 3) {
+                    image = down1;
+                }
+                if (spriteIndex == 4) {
+                    image = down2;
+                }
+                if (spriteIndex == 5) {
+                    image = left1;
+                }
+                if (spriteIndex == 6) {
+                    image = left2;
+                }
+                if (spriteIndex == 7) {
+                    image = right1;
+                }
+                if (spriteIndex == 8) {
+                    image = right2;
+                }
+            }
+
 
             //this code draws the tile to the screen.
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
