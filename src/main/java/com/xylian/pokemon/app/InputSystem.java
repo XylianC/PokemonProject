@@ -2,7 +2,6 @@ package com.xylian.pokemon.app;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.InputStream;
 
 public class InputSystem implements KeyListener {
     GamePanel gp;
@@ -19,7 +18,48 @@ public class InputSystem implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
 
-        // Playstate
+        // Title State
+        if(gp.gameState == gp.titleState) {
+            if (gp.ui.mainMenuState == 0) {
+                if (code == KeyEvent.VK_UP || code == KeyEvent.VK_Z) {
+                    gp.ui.mainMenuIndex--;
+                    if (gp.ui.mainMenuIndex < 0) {
+                        gp.ui.mainMenuIndex = 3;
+                    }
+                }
+                if (code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
+                    gp.ui.mainMenuIndex++;
+                    if (gp.ui.mainMenuIndex > 3) {
+                        gp.ui.mainMenuIndex = 0;
+                    }
+                }
+                if (code == KeyEvent.VK_E || code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
+                    switch (gp.ui.mainMenuIndex) {
+                        case 0:
+                            gp.gameState = gp.ui.mainMenuState++;
+                            break;
+                        case 1:
+                            gp.gameState = gp.playState;
+                            break;
+                        case 2:
+                            gp.gameState = gp.playState;
+                            break;
+                        case 3:
+                            System.exit(0);
+                            break;
+                    }
+                }
+            } else if (gp.ui.mainMenuState == 1) {
+                if (code == KeyEvent.VK_E || code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
+                    gp.gameState = gp.ui.mainMenuState++;
+
+                }
+            }
+        }
+
+
+
+        // Play State
         if (gp.gameState == gp.playState) {
             if (code == KeyEvent.VK_Z) {
                 upPressed = true;
@@ -46,7 +86,14 @@ public class InputSystem implements KeyListener {
             if (code == KeyEvent.VK_ESCAPE) {
                 gp.gameState = gp.playState;
             }
+            if(code == KeyEvent.VK_UP || code == KeyEvent.VK_Z) {
+                gp.ui.pauseMenuIndex--;
+            }
+            if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
+                gp.ui.pauseMenuIndex++;
+            }
         }
+
         // Dialogue State;
         else if (gp.gameState == gp.dialogueState) {
             if (code == KeyEvent.VK_SPACE) {

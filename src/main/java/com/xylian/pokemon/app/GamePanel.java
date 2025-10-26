@@ -73,7 +73,7 @@ public class GamePanel extends JPanel implements Runnable {
         aPlacer.SetNPC();
 
         //playMusic(0);
-        gameState = playState;
+        gameState = titleState;
     }
 
     public void startGameThread() {

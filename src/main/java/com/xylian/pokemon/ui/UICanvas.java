@@ -1,6 +1,7 @@
 package com.xylian.pokemon.ui;
 
 import com.xylian.pokemon.app.GamePanel;
+import com.xylian.pokemon.world.objects.OBJ_Pokebal;
 
 import java.awt.*;
 import java.io.IOException;
@@ -15,13 +16,15 @@ public class UICanvas {
     public boolean messageOn = false;
     public String message = "";
 
-    int messageCounter = 0;
-    int messageDisplayTime = 90; // 60 = 1 second
-
-    public boolean gameFinished = false;
+    // Pause Menu
+    public int pauseMenuIndex = 0;
 
     // Dialog
     public String currentDialogue;
+
+    // TitleScreen Menu Commands
+    public int mainMenuIndex = 0;
+    public int mainMenuState = 0;
 
 
     public UICanvas(GamePanel gp) {
@@ -45,9 +48,8 @@ public class UICanvas {
         g2.setFont(fnt_PixelOperator);
         g2.setColor(Color.white);
 
-
+        // Title State
         if(gp.gameState == gp.titleState) {
-            setFontSize(80);
             drawTitleScreen();
         }
 
@@ -80,10 +82,79 @@ public class UICanvas {
     }
 
     public void drawTitleScreen() {
-        String text = "Pokepals";
-        int x = getTextCenterOnScreen(text);
-        int y = gp.screenHeight / 2;
-        g2.drawString(text, x, y);
+        if(mainMenuState == 0) {
+            g2.setColor(new Color(250, 100, 100));
+            g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+
+            setFontSize(200);
+            String text = "Pokepals";
+            int x = getTextCenterOnScreen(text);
+            int y = gp.screenHeight / 2 - (gp.tileSize * 3);
+
+            // Draw shadow
+            g2.setColor(new Color(0, 0, 0, 100));
+            g2.drawString(text, x + 5, y + 5);
+
+            // Draw text on top of the shadow
+            g2.setColor(new Color(255, 255, 255));
+            g2.drawString(text, x, y);
+
+            // Pokebal image
+            x = gp.screenWidth / 2 - (gp.tileSize * 4) / 2;
+            y = gp.screenHeight / 2 - (gp.tileSize * 2);
+            g2.drawImage(new OBJ_Pokebal(gp).image, x, y, gp.tileSize * 4, gp.tileSize * 4, null);
+
+            // Draw menu
+            setFontSize(60);
+
+            text = "NEW GAME";
+            x = getTextCenterOnScreen(text);
+            y += gp.tileSize * 6;
+            g2.drawString(text, x, y);
+
+            if (mainMenuIndex == 0) {
+                g2.drawString(">", x - gp.tileSize, y);
+            }
+
+            text = "CONTINUE";
+            x = getTextCenterOnScreen(text);
+            y += gp.tileSize;
+            g2.drawString(text, x, y);
+            if (mainMenuIndex == 1) {
+                g2.drawString(">", x - gp.tileSize, y);
+            }
+
+            text = "SETTINGS";
+            x = getTextCenterOnScreen(text);
+            y += gp.tileSize;
+            g2.drawString(text, x, y);
+            if (mainMenuIndex == 2) {
+                g2.drawString(">", x - gp.tileSize, y);
+            }
+            text = "QUIT";
+            x = getTextCenterOnScreen(text);
+            y += gp.tileSize;
+            g2.drawString(text, x, y);
+            if (mainMenuIndex == 3) {
+                g2.drawString(">", x - gp.tileSize, y);
+            }
+        }
+
+        // New Game Window
+        if(mainMenuState == 1) {
+            int x = gp.screenWidth / 2 - (gp.tileSize * 4) / 2;
+            int y = gp.screenHeight / 2 - (gp.tileSize * 2);
+            g2.drawImage(new OBJ_Pokebal(gp).image, x, y, gp.tileSize * 4, gp.tileSize * 4, null);
+
+            currentDialogue = "Welcome to the world of Pokemon\nAre you a boy, or a girl?";
+            drawDialogWindow();
+        }
+
+        // Settings Window
+        if(mainMenuState == 2) {
+            // Do nothing for now
+        }
     }
 
     public void drawOverworldInterface() {
@@ -91,6 +162,11 @@ public class UICanvas {
     }
 
     public void drawMenuScreen() {
+        g2.setColor(new Color(0, 0, 0, 75));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+
+        g2.setColor(new Color(255, 255, 255));
         String text = "PAUSED";
         int x = getTextCenterOnScreen(text);
         int y = gp.screenHeight /2 - (gp.tileSize);
@@ -99,6 +175,13 @@ public class UICanvas {
     }
 
     public void drawBattleScreen() {
+        // Draw white background
+        g2.setColor(new Color(255, 255, 255));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+
+        // Draw some text to the screen for clarity
+        g2.setColor(new Color(0, 0, 0));
         String text = "Battlescene";
         int x = getTextCenterOnScreen(text);
         int y = gp.screenHeight / 2;
