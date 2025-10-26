@@ -49,10 +49,34 @@ public class InputSystem implements KeyListener {
                             break;
                     }
                 }
-            } else if (gp.ui.mainMenuState == 1) {
-                if (code == KeyEvent.VK_E || code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
-                    gp.gameState = gp.ui.mainMenuState++;
+            }
+            else if (gp.ui.mainMenuState == 1) {
 
+                if (code == KeyEvent.VK_UP || code == KeyEvent.VK_Z) {
+                    gp.ui.thisOrThatIndex--;
+                    if (gp.ui.thisOrThatIndex < 0) {
+                        gp.ui.thisOrThatIndex = 1;
+                    }
+                }
+                if (code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
+                    gp.ui.thisOrThatIndex++;
+                    if (gp.ui.thisOrThatIndex > 1) {
+                        gp.ui.thisOrThatIndex = 0;
+                    }
+                }
+
+                if (code == KeyEvent.VK_E || code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
+                    if(gp.ui.thisOrThatOpen) {
+                        if (gp.ui.thisOrThatIndex == 0) {
+                            gp.ui.thisOrThatAnswered = true;
+                            gp.ui.thisOrThatResponse = 0;
+                        } else if (gp.ui.thisOrThatIndex == 1) {
+                            gp.ui.thisOrThatAnswered = true;
+                            gp.ui.thisOrThatResponse = 1;
+                        }
+                    } else {
+                        gp.ui.introStep ++;
+                    }
                 }
             }
         }
@@ -80,7 +104,7 @@ public class InputSystem implements KeyListener {
         }
 
         // Pause State
-        if (gp.gameState == gp.pauseState) {
+        else if (gp.gameState == gp.pauseState) {
             if (code == KeyEvent.VK_ESCAPE) {
                 gp.gameState = gp.playState;
             }
@@ -96,17 +120,28 @@ public class InputSystem implements KeyListener {
                     gp.ui.pauseMenuIndex = 0;
                 }
             }
+            if (code == KeyEvent.VK_E || code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
+                switch (gp.ui.pauseMenuIndex) {
+                    case 0, 1, 2, 3, 4:
+                        System.out.println("I dont do anything yet");
+                        break;
+                    case 5:
+                        gp.gameState = gp.titleState;
+                        break;
+                }
+            }
+
         }
 
         // Dialogue State;
-        if (gp.gameState == gp.dialogueState) {
+        else if (gp.gameState == gp.dialogueState) {
             if (code == KeyEvent.VK_SPACE) {
                 gp.gameState = gp.playState;
             }
         }
 
         // Battle State
-        if (gp.gameState == gp.battleState) {
+        else if (gp.gameState == gp.battleState) {
             if(code == KeyEvent.VK_UP || code == KeyEvent.VK_Z) {
                 gp.ui.battleMenuIndex--;
                 if (gp.ui.battleMenuIndex < 0) {
