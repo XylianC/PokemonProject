@@ -73,7 +73,7 @@ public class InputSystem implements KeyListener {
             if (code == KeyEvent.VK_D) {
                 rightPressed = true;
             }
-            if (code == KeyEvent.VK_E) {
+            if (code == KeyEvent.VK_E || code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
                 interactionPressed = true;
             }
             if (code == KeyEvent.VK_ESCAPE) {
@@ -88,9 +88,15 @@ public class InputSystem implements KeyListener {
             }
             if(code == KeyEvent.VK_UP || code == KeyEvent.VK_Z) {
                 gp.ui.pauseMenuIndex--;
+                if (gp.ui.pauseMenuIndex < 0) {
+                    gp.ui.pauseMenuIndex = 5;
+                }
             }
             if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
                 gp.ui.pauseMenuIndex++;
+                if (gp.ui.pauseMenuIndex > 5) {
+                    gp.ui.pauseMenuIndex = 0;
+                }
             }
         }
 
@@ -98,6 +104,41 @@ public class InputSystem implements KeyListener {
         else if (gp.gameState == gp.dialogueState) {
             if (code == KeyEvent.VK_SPACE) {
                 gp.gameState = gp.playState;
+            }
+        }
+
+        // Battle State
+        else if (gp.gameState == gp.battleState) {
+            if(code == KeyEvent.VK_UP || code == KeyEvent.VK_Z) {
+                gp.ui.battleMenuIndex--;
+                if (gp.ui.battleMenuIndex < 0) {
+                    gp.ui.battleMenuIndex = 3;
+                }
+            }
+            if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
+                gp.ui.battleMenuIndex++;
+                if (gp.ui.battleMenuIndex > 3) {
+                    gp.ui.battleMenuIndex = 0;
+                }
+            }
+            if (code == KeyEvent.VK_E || code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
+                switch (gp.ui.battleMenuIndex) {
+                    case 0:
+                        gp.ui.battleMenuState = 0;
+                        System.out.println("Choose your attack!");
+                        break;
+                    case 1:
+                        gp.ui.battleMenuState = 1;
+                        System.out.println("Here is some info!");
+                        break;
+                    case 2:
+                        gp.ui.battleMenuState = 2;
+                        System.out.println("Choose an item!");
+                        break;
+                    case 3:
+                        gp.gameState = gp.playState;
+                        break;
+                }
             }
         }
     }

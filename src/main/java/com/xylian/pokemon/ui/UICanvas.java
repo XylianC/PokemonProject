@@ -1,6 +1,7 @@
 package com.xylian.pokemon.ui;
 
 import com.xylian.pokemon.app.GamePanel;
+import com.xylian.pokemon.entity.NPC_MonsterTest;
 import com.xylian.pokemon.world.objects.OBJ_Pokebal;
 
 import java.awt.*;
@@ -16,15 +17,20 @@ public class UICanvas {
     public boolean messageOn = false;
     public String message = "";
 
-    // Pause Menu
+    // Pause Menu & Commands
     public int pauseMenuIndex = 0;
+    public int pauseMenuState = 0;
 
     // Dialog
     public String currentDialogue;
 
-    // TitleScreen Menu Commands
+    // TitleScreen Menu & Commands
     public int mainMenuIndex = 0;
     public int mainMenuState = 0;
+
+    // Battlescreen Menu & Commands
+    public int battleMenuIndex = 0;
+    public int battleMenuState = 0;
 
 
     public UICanvas(GamePanel gp) {
@@ -165,13 +171,80 @@ public class UICanvas {
         g2.setColor(new Color(0, 0, 0, 75));
         g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
+        String text = "";
 
-        g2.setColor(new Color(255, 255, 255));
-        String text = "PAUSED";
-        int x = getTextCenterOnScreen(text);
-        int y = gp.screenHeight /2 - (gp.tileSize);
+        int margin = gp.tileSize;
+        int width = gp.tileSize * 6;
+        int height = gp.screenHeight - margin * 5;
+        int x = gp.screenWidth - width - margin;
+        int y = margin;
 
+        g2.setColor(new Color(0, 0, 0, 200)); // semi-transparant
+        g2.fillRect(x, y, width, height);
+
+        g2.setColor(Color.white);
+        g2.setStroke(new BasicStroke(4));
+        g2.drawRect(x, y, width, height);
+
+        // Draw Text and cursor
+        setFontSize(50);
+        x += gp.tileSize;
+        y += gp.tileSize * 2 - 24;
+
+        text = "POKEDEX";
         g2.drawString(text, x, y);
+
+        if (pauseMenuIndex == 0) {
+            g2.drawString(">", x - gp.tileSize / 2, y);
+        }
+
+        y += gp.tileSize * 2;
+
+        text = "POKEMON";
+        g2.drawString(text, x, y);
+
+        if (pauseMenuIndex == 1) {
+            g2.drawString(">", x - gp.tileSize / 2, y);
+        }
+
+        y += gp.tileSize * 2;
+
+        text = "INVENTORY";
+        g2.drawString(text, x, y);
+
+        if (pauseMenuIndex == 2) {
+            g2.drawString(">", x - gp.tileSize / 2, y);
+        }
+
+        y += gp.tileSize * 2;
+
+        text = "TRAINER";
+        g2.drawString(text, x, y);
+
+        if (pauseMenuIndex == 3) {
+            g2.drawString(">", x - gp.tileSize / 2, y);
+        }
+
+        y += gp.tileSize * 2;
+
+        text = "SETTINGS";
+        g2.drawString(text, x, y);
+
+        if (pauseMenuIndex == 4) {
+            g2.drawString(">", x - gp.tileSize / 2, y);
+        }
+
+        y += gp.tileSize * 2;
+
+        text = "QUIT";
+        g2.drawString(text, x, y);
+
+        if (pauseMenuIndex == 5) {
+            g2.drawString(">", x - gp.tileSize / 2, y);
+        }
+
+
+
     }
 
     public void drawBattleScreen() {
@@ -179,13 +252,70 @@ public class UICanvas {
         g2.setColor(new Color(255, 255, 255));
         g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
+        // Draw the pokemen to the scrin
+        int playerMonX = gp.tileSize * 3;
+        int playerMonY = gp.tileSize * 7;
+        g2.drawImage(new NPC_MonsterTest(gp).down1, playerMonX, playerMonY, gp.tileSize * 5, gp.tileSize * 5, null);
 
-        // Draw some text to the screen for clarity
-        g2.setColor(new Color(0, 0, 0));
-        String text = "Battlescene";
-        int x = getTextCenterOnScreen(text);
-        int y = gp.screenHeight / 2;
+        int opponentMonX = gp.tileSize * 15;
+        int opponentMonY = gp.tileSize * 2;
+        g2.drawImage(new NPC_MonsterTest(gp).down1, opponentMonX, opponentMonY, gp.tileSize * 5, gp.tileSize * 5, null);
+
+        // Battle screen
+        String text = "";
+
+        int margin = gp.tileSize;
+        int width = gp.tileSize * 7;
+        int height = gp.tileSize * 4;
+        int x = gp.screenWidth - (gp.tileSize * 8);
+        int y = gp.tileSize * 13;
+
+        drawSubWindow(x, y, width, height);
+
+        // Draw Text and cursor
+        setFontSize(40);
+        x += gp.tileSize;
+        y += gp.tileSize * 2 - 24;
+
+        text = "FIGHT";
         g2.drawString(text, x, y);
+
+        int lineHeight = 1;
+
+        if (battleMenuIndex == 0) {
+            g2.drawString(">", x - gp.tileSize / 2, y);
+        }
+
+        y += gp.tileSize * lineHeight;
+
+        text = "INFO";
+        g2.drawString(text, x, y);
+
+        if (battleMenuIndex == 1) {
+            g2.drawString(">", x - gp.tileSize / 2, y);
+        }
+
+        x += gp.tileSize * 3;
+        y -= gp.tileSize * lineHeight;
+
+        text = "ITEM";
+        g2.drawString(text, x, y);
+
+        if (battleMenuIndex == 2) {
+            g2.drawString(">", x - gp.tileSize / 2, y);
+        }
+
+        y += gp.tileSize * lineHeight;
+
+        text = "RUN";
+        g2.drawString(text, x, y);
+
+        if (battleMenuIndex == 3) {
+            g2.drawString(">", x - gp.tileSize / 2, y);
+        }
+
+        currentDialogue = "You are now fighting!";
+        drawBattleDialogWindow();
     }
 
 
@@ -196,6 +326,25 @@ public class UICanvas {
         int y = gp.tileSize * 12;
         int width = gp.screenWidth - (gp.tileSize * 4);
         int height = gp.tileSize * 5;
+
+        drawSubWindow(x, y, width, height);
+
+        x += gp.tileSize;
+        y += gp.tileSize + 10;
+
+        setFontSize(40);
+        for (String line : currentDialogue.split("\n")) {
+            g2.drawString(line, x, y);
+            y += 40;
+        }
+    }
+
+    public void drawBattleDialogWindow() {
+        // Window paramaters
+        int x = gp.tileSize * 2;
+        int y = gp.tileSize * 13;
+        int width = gp.screenWidth - (gp.tileSize * 10);
+        int height = gp.tileSize * 4;
 
         drawSubWindow(x, y, width, height);
 

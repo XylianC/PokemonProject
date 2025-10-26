@@ -207,8 +207,12 @@ public class PlayerEntity extends Entity {
             gp.npc[index].canMove = false;
 
             if (gp.input.interactionPressed) {
-                gp.gameState = gp.dialogueState;
-                gp.npc[index].speak();
+                if(!gp.npc[index].isMonster) {
+                    gp.gameState = gp.dialogueState;
+                    gp.npc[index].speak();
+                } else {
+                    gp.gameState = gp.battleState;
+                }
             }
         }
         gp.input.interactionPressed = false;

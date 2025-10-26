@@ -33,8 +33,6 @@ public class NPC_MonsterTest extends Entity {
     }
 
     public void setDialogue() {
-        dialogues[0] = "Hello, I am NPC!";
-        dialogues[1] = "Welcome to the world of Pokemon!\nIt is ever so nice to meet you, how are you today?";
 
     }
 
